@@ -18,7 +18,7 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.tiagodocouto.playerservice
+package io.github.tiagodocouto.playerservice.app
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -28,11 +28,11 @@ import org.springframework.boot.runApplication
  * @see SpringBootApplication
  */
 @SpringBootApplication
-class PlayerServiceApplication
+class App
 
 /**
  * The entry point of the application.
  */
 fun main() {
-    runApplication<PlayerServiceApplication>()
+    runApplication<App>()
 }

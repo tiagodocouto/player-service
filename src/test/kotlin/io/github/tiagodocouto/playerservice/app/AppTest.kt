@@ -18,12 +18,12 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.tiagodocouto.playerservice
+package io.github.tiagodocouto.playerservice.app
 
 import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 
-class PlayerServiceApplicationTest : AnnotationSpec() {
+class AppTest : AnnotationSpec() {
     @Test
     fun happyDay() {
         1 shouldBe 1
