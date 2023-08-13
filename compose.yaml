@@ -1,1 +1,70 @@
+version: '3.8'
+
 services:
+  game_mongo:
+    image: mongo:latest
+    hostname: game_mongo
+    container_name: game_mongo
+    environment:
+      - PUID=1000
+      - PGID=1000
+    ports:
+      - "27017:27017"
+    volumes:
+      - /tmp/dev/game/mongodb:/data/db
+    networks:
+      - game_network
+    restart: unless-stopped
+
+  game_zookeeper:
+    image: wurstmeister/zookeeper:latest
+    hostname: game_zookeeper
+    container_name: game_zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - game_network
+
+  game_kafka:
+    image: wurstmeister/kafka:latest
+    hostname: game_kafka
+    container_name: game_kafka
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: game_zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093,OUTSIDE://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://:9093,OUTSIDE://:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_CREATE_TOPICS: "Topic1:1:1,Topic2:1:1:compact"
+    ports:
+      - "9092:9092"
+      - "9093"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - game_network
+    depends_on:
+      - game_zookeeper
+
+  game_kafdrop:
+    image: obsidiandynamics/kafdrop:latest
+    hostname: game_kafdrop
+    container_name: game_kafdrop
+    environment:
+      KAFKA_BROKERCONNECT: game_kafka:9093
+      JVM_OPTS: "-Xms32M -Xmx64M"
+      SERVER_SERVLET_CONTEXTPATH: "/"
+    ports:
+      - "9000:9000"
+    networks:
+      - game_network
+    depends_on:
+      - game_zookeeper
+      - game_kafka
+
+networks:
+  game_network:
+    driver: bridge

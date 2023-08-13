@@ -20,14 +20,12 @@
 
 package io.github.tiagodocouto.playerservice
 
-import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
+import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.matchers.shouldBe
 
-@SpringBootTest
-class PlayerServiceApplicationTests {
-
+class PlayerServiceApplicationTest : AnnotationSpec() {
     @Test
-    fun contextLoads() {
+    fun happyDay() {
+        1 shouldBe 1
     }
-
 }

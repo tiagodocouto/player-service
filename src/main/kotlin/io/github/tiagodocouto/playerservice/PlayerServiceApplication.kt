@@ -23,9 +23,16 @@ package io.github.tiagodocouto.playerservice
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
+/**
+ * The main class of the application.
+ * @see SpringBootApplication
+ */
 @SpringBootApplication
 class PlayerServiceApplication
 
-fun main(args: Array<String>) {
-    runApplication<PlayerServiceApplication>(*args)
+/**
+ * The entry point of the application.
+ */
+fun main() {
+    runApplication<PlayerServiceApplication>()
 }
