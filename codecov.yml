@@ -1,0 +1,3 @@
+ignore:
+  - "src/main/kotlin/**/*Application*"
+  - "src/main/kotlin/**/base/**/*"

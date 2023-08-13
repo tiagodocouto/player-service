@@ -1,0 +1,39 @@
+name: "💡Feature Request"
+description: Create a new ticket for a new feature request
+title: "💡[REQUEST] - <title>"
+labels: [
+  "enhancement"
+]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: "🖋Summary"
+      description: Provide a brief explanation of the feature
+      placeholder: Describe in a few lines your feature request
+    validations:
+      required: true
+  - type: input
+    id: implementation_pr
+    attributes:
+      label: "🤖Implementation PR"
+      description: Pull request used
+      placeholder: "#Pull Request ID"
+    validations:
+      required: false
+  - type: input
+    id: reference_issues
+    attributes:
+      label: "🤖Reference Issues"
+      description: Please link to the issue here
+      placeholder: "#Issues IDs"
+    validations:
+      required: false
+  - type: textarea
+    id: out_of_scope
+    attributes:
+      label: "❌Out Of Scope"
+      description: What is Out of Scope for this feature ?
+      placeholder: Identify any out of scope points
+    validations:
+      required: false
