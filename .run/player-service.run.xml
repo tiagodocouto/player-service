@@ -19,7 +19,9 @@
   -->
 
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="player-service" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <configuration default="false" name="player-service" type="SpringBootApplicationConfigurationType"
+                   factoryName="Spring Boot">
+        <option name="ACTIVE_PROFILES" value="dev"/>
         <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources"/>
         <module name="player-service.main"/>
         <option name="SPRING_BOOT_MAIN_CLASS" value="io.github.tiagodocouto.playerservice.app.AppKt"/>

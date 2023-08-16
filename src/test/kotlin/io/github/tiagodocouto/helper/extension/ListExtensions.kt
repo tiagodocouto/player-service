@@ -18,14 +18,20 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.tiagodocouto.playerservice.app
+package io.github.tiagodocouto.helper.extension
 
-import io.github.tiagodocouto.helper.spec.TestSpec
-import io.kotest.matchers.shouldBe
-
-class AppTest : TestSpec() {
-    @Test
-    fun happyDay() {
-        1 shouldBe 1
+/**
+ * [ListExtensions]
+ * Some helper extensions for [List]
+ */
+object ListExtensions {
+    /**
+     * [List.isEmpty]
+     * Executes [block] if [List] is empty
+     */
+    fun List<*>?.isEmpty(block: () -> Unit) {
+        if (this?.isEmpty() == true) {
+            block()
+        }
     }
 }

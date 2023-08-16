@@ -18,14 +18,10 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.tiagodocouto.playerservice.app
+package io.github.tiagodocouto.playerservice
 
-import io.github.tiagodocouto.helper.spec.TestSpec
-import io.kotest.matchers.shouldBe
+import com.tngtech.archunit.junit.AnalyzeClasses
+import io.github.tiagodocouto.helper.spec.ArchTestSpec
 
-class AppTest : TestSpec() {
-    @Test
-    fun happyDay() {
-        1 shouldBe 1
-    }
-}
+@AnalyzeClasses(packages = ["dev.realmkit.game"])
+class ArchTest : ArchTestSpec()

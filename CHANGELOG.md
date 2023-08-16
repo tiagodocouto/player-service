@@ -23,5 +23,6 @@ ___
 > - [x] `Detekt` plugin for Code Quality
 > - [x] `Spotless` plugin for Code Quality
 > - [x] `Sonarqube` plugin for Code Coverage
+> - [x] `ArchUnit` for Architecture tests
 > - [ ] `Dokka` plugin for generating KDoc documentation
 > - [ ] `Kotlinx` for concurrency

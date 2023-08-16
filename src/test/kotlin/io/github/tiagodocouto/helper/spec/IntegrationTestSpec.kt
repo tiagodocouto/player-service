@@ -18,14 +18,30 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.tiagodocouto.playerservice.app
+package io.github.tiagodocouto.helper.spec
 
-import io.github.tiagodocouto.helper.spec.TestSpec
-import io.kotest.matchers.shouldBe
-
-class AppTest : TestSpec() {
-    @Test
-    fun happyDay() {
-        1 shouldBe 1
-    }
-}
+/**
+ * [IntegrationTestSpec]
+ * This class wraps a few extra things on top of [Kotest ExpectSpec][TestSpec]
+ * Use it for Integration Tests purpose, as it will start the database and
+ * everything else needed by the main application to start
+ * @Testcontainers
+ *     init {
+ *         this.body()
+ *     }
+ *
+ *     companion object {
+ *         /**
+ *          * Sets the [Mongo container][Mongo] url on the property registry
+ *          *
+ *          * @param registry the property registry
+ *          * @see DynamicPropertyRegistry
+ *          */
+ *         @JvmStatic
+ *         @DynamicPropertySource
+ *         fun dynamicPropertySource(registry: DynamicPropertyRegistry) {
+ *             Mongo.registry(registry)
+ *         }
+ *     }
+ */
+abstract class IntegrationTestSpec : TestSpec()

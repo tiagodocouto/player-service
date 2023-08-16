@@ -18,14 +18,24 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.tiagodocouto.playerservice.app
+package io.github.tiagodocouto.helper.spec
 
-import io.github.tiagodocouto.helper.spec.TestSpec
-import io.kotest.matchers.shouldBe
+import io.kotest.common.ExperimentalKotest
+import io.kotest.core.spec.IsolationMode.InstancePerTest
+import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.core.spec.style.ExpectSpec
 
-class AppTest : TestSpec() {
-    @Test
-    fun happyDay() {
-        1 shouldBe 1
+/**
+ * [TestSpec]
+ * This class wraps a few extra things on top of [Kotest ExpectSpec][ExpectSpec]
+ *
+ * @see ExpectSpec
+ */
+@OptIn(ExperimentalKotest::class)
+abstract class TestSpec : AnnotationSpec() {
+    init {
+        threads = 10
+        concurrency = 10
+        isolationMode = InstancePerTest
     }
 }
