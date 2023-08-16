@@ -7,6 +7,7 @@
 ## Design
 
 ![architecture.jpg](docs%2Farchitecture.jpg)
+![player-service.jpg](docs%2Fplayer-service.jpg)
 
 ---
 

@@ -14,6 +14,10 @@ ___
 >   <summary>Added high level system design diagram</summary>
 >   <img src="docs/architecture.jpg" alt="architecture"/>
 > </details>
+> <details>
+>   <summary>Added player-service design diagram</summary>
+>   <img src="docs/player-service.jpg" alt="architecture"/>
+> </details>
 
 > ### `Initial Setup`
 > [Adding dependencies and plugins for the project](gradle/libs.versions.toml)
