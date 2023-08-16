@@ -24,5 +24,6 @@ ___
 > - [x] `Spotless` plugin for Code Quality
 > - [x] `Sonarqube` plugin for Code Coverage
 > - [x] `ArchUnit` for Architecture tests
+> - [x] `TestContainers` for Integration tests
 > - [ ] `Dokka` plugin for generating KDoc documentation
 > - [ ] `Kotlinx` for concurrency

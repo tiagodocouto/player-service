@@ -20,10 +20,12 @@
 
 package io.github.tiagodocouto.playerservice.app
 
-import io.github.tiagodocouto.helper.spec.TestSpec
+import io.github.tiagodocouto.helper.infra.IntegrationTestContext
+import io.github.tiagodocouto.helper.spec.IntegrationTestSpec
 import io.kotest.matchers.shouldBe
 
-class AppTest : TestSpec() {
+@IntegrationTestContext
+class AppTest : IntegrationTestSpec() {
     @Test
     fun happyDay() {
         1 shouldBe 1

@@ -55,10 +55,11 @@ dependencies {
     // Spring
     implementation(libs.bundles.spring.boot)
     // Test
-    testImplementation(libs.bundles.spring.boot)
-    testImplementation(libs.bundles.test.kotest)
+    testImplementation(libs.bundles.test.spring.boot)
     testImplementation(libs.bundles.test.archunit)
+    testImplementation(libs.bundles.test.kotest)
     testImplementation(libs.bundles.test.mocks)
+    testImplementation(libs.bundles.test.testcontainers)
     // Code Quality
     detektPlugins(libs.bundles.quality.deteket)
 }

@@ -23,5 +23,5 @@ package io.github.tiagodocouto.playerservice
 import com.tngtech.archunit.junit.AnalyzeClasses
 import io.github.tiagodocouto.helper.spec.ArchTestSpec
 
-@AnalyzeClasses(packages = ["dev.realmkit.game"])
+@AnalyzeClasses(packages = ["io.github.tiagodocouto.playerservice"])
 class ArchTest : ArchTestSpec()

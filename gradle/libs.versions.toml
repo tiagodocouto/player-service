@@ -3,17 +3,18 @@ kotlin = "1.9.0"
 kotlinx-kover = "0.7.3"
 quality-catalog = "0.8.1"
 quality-detekt = "1.23.1"
+quality-sonarqube = "4.3.0.3225"
 quality-spotless = "6.20.0"
 quality-versions = "0.47.0"
-quality-sonarqube = "4.3.0.3225"
 spring-boot = "3.1.2"
 spring-management = "1.1.3"
+test-archunit = "1.1.0"
+test-faker = "1.14.0"
 test-kotest = "5.6.2"
 test-kotest-arb = "2.1.2"
 test-kotest-konform = "1.0.2"
 test-kotest-spring = "1.1.3"
-test-archunit = "1.1.0"
-test-faker = "1.14.0"
+test-testcontainers = "1.18.3"
 
 [libraries]
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
@@ -33,15 +34,18 @@ spring-boot-data-mongodb = { module = "org.springframework.boot:spring-boot-star
 spring-boot-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
 spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" }
 spring-dev-tools = { module = "org.springframework.boot:spring-boot-devtools" }
+test-archunit-core = { module = "com.tngtech.archunit:archunit", version.ref = "test-archunit" }
+test-archunit-junit5 = { module = "com.tngtech.archunit:archunit-junit5", version.ref = "test-archunit" }
+test-faker = { module = "io.github.serpro69:kotlin-faker", version.ref = "test-faker" }
 test-kotest-arb = { module = "io.kotest.extensions:kotest-property-arbs", version.ref = "test-kotest-arb" }
 test-kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "test-kotest" }
 test-kotest-junit = { module = "io.kotest:kotest-runner-junit5", version.ref = "test-kotest" }
 test-kotest-konform = { module = "io.kotest.extensions:kotest-assertions-konform", version.ref = "test-kotest-konform" }
 test-kotest-property = { module = "io.kotest:kotest-property", version.ref = "test-kotest" }
 test-kotest-spring = { module = "io.kotest.extensions:kotest-extensions-spring", version.ref = "test-kotest-spring" }
-test-archunit-core = { module = "com.tngtech.archunit:archunit", version.ref = "test-archunit" }
-test-archunit-junit5 = { module = "com.tngtech.archunit:archunit-junit5", version.ref = "test-archunit" }
-test-faker = { module = "io.github.serpro69:kotlin-faker", version.ref = "test-faker" }
+test-spring-boot = { module = "org.springframework.boot:spring-boot-starter-test" }
+test-testcontainers-junit = { module = "org.testcontainers:junit-jupiter", version.ref = "test-testcontainers" }
+test-testcontainers-mongodb = { module = "org.testcontainers:mongodb", version.ref = "test-testcontainers" }
 
 [bundles]
 quality-deteket = [
@@ -62,6 +66,10 @@ spring-boot = [
     "spring-boot-data-mongodb",
     "spring-boot-starter",
 ]
+test-archunit = [
+    "test-archunit-core",
+    "test-archunit-junit5",
+]
 test-kotest = [
     "test-kotest-arb",
     "test-kotest-assertions",
@@ -70,12 +78,15 @@ test-kotest = [
     "test-kotest-property",
     "test-kotest-spring",
 ]
-test-archunit = [
-    "test-archunit-core",
-    "test-archunit-junit5",
-]
 test-mocks = [
     "test-faker",
+]
+test-spring-boot = [
+    "test-spring-boot",
+]
+test-testcontainers = [
+    "test-testcontainers-junit",
+    "test-testcontainers-mongodb",
 ]
 
 [plugins]
@@ -84,8 +95,8 @@ kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotl
 kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinx-kover" }
 quality-catalog = { id = "nl.littlerobots.version-catalog-update", version.ref = "quality-catalog" }
 quality-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "quality-detekt" }
+quality-sonarqube = { id = "org.sonarqube", version.ref = "quality-sonarqube" }
 quality-spotless = { id = "com.diffplug.spotless", version.ref = "quality-spotless" }
 quality-versions = { id = "com.github.ben-manes.versions", version.ref = "quality-versions" }
-quality-sonarqube = { id = "org.sonarqube", version.ref = "quality-sonarqube" }
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-management = { id = "io.spring.dependency-management", version.ref = "spring-management" }

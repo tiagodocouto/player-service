@@ -18,32 +18,21 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.tiagodocouto.helper.spec
+package io.github.tiagodocouto.helper.infra
 
-import io.github.tiagodocouto.helper.infra.Mongo
-import org.springframework.test.context.DynamicPropertyRegistry
-import org.springframework.test.context.DynamicPropertySource
-import org.testcontainers.junit.jupiter.Testcontainers
+import io.github.tiagodocouto.playerservice.app.App
+import io.kotest.core.extensions.ApplyExtension
+import io.kotest.extensions.spring.SpringTestExtension
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
 
 /**
- * [IntegrationTestSpec]
- * This class wraps a few extra things on top of [Kotest ExpectSpec][TestSpec]
- * Use it for Integration Tests purpose, as it will start the database and
- * everything else needed by the main application to start
+ * [IntegrationTestContext]
+ * Wraps all annotations needed to start an Integration Test
  */
-@Testcontainers
-abstract class IntegrationTestSpec : TestSpec() {
-    companion object {
-        /**
-         * Sets the [Mongo container][Mongo] url on the property registry
-         *
-         * @param registry the property registry
-         * @see DynamicPropertyRegistry
-         */
-        @JvmStatic
-        @DynamicPropertySource
-        fun dynamicPropertySource(registry: DynamicPropertyRegistry) {
-            Mongo.registry(registry)
-        }
-    }
-}
+@ActiveProfiles(
+    "itest",
+)
+@SpringBootTest(classes = [App::class])
+@ApplyExtension(SpringTestExtension::class)
+annotation class IntegrationTestContext
