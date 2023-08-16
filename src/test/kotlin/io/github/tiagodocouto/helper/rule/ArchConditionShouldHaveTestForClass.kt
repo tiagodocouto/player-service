@@ -24,36 +24,35 @@ import com.tngtech.archunit.core.domain.JavaClass
 import com.tngtech.archunit.lang.ArchCondition
 import com.tngtech.archunit.lang.ConditionEvents
 import com.tngtech.archunit.lang.SimpleConditionEvent.violated
-import io.github.tiagodocouto.helper.extension.ListExtensions.isEmpty
+import io.github.tiagodocouto.playerservice.core.extension.ListExtensions.isMissing
 
 private const val SUFFIX_TEST = "Test"
+private const val SUFFIX_EXTENSION = "Extensions"
 private const val SUFFIX_KT = "Kt"
 private const val IS_ANONYMOUS_CLASS = "$"
 typealias TestClassesBySimpleClassName = Map<String, List<JavaClass>>
 
-object ArchConditionShouldHaveTestForClass :
-    ArchCondition<JavaClass>("should have test for class") {
+object ArchConditionShouldHaveTestForClass : ArchCondition<JavaClass>("should have test for class") {
+    private lateinit var testClassesBySimpleClassName: TestClassesBySimpleClassName
+    private val JavaClass.shouldFilterOut: Boolean
+        get() = name.endsWith(SUFFIX_TEST) &&
+            !isAnonymousClass
     private val JavaClass.shouldIgnore: Boolean
         get() = simpleName.endsWith(SUFFIX_TEST) ||
             simpleName.endsWith(SUFFIX_KT) ||
+            simpleName.endsWith(SUFFIX_EXTENSION) ||
             name.contains(IS_ANONYMOUS_CLASS) ||
             isInterface ||
             isAnonymousClass
-    private lateinit var testClassesBySimpleClassName: TestClassesBySimpleClassName
 
     override fun init(allObjectsToTest: MutableCollection<JavaClass>) {
-        testClassesBySimpleClassName =
-            allObjectsToTest.filter { clazz ->
-                clazz.name.endsWith(SUFFIX_TEST) && !clazz.isAnonymousClass
-            }.groupBy { clazz -> clazz.simpleName }
+        testClassesBySimpleClassName = allObjectsToTest.filter { it.shouldFilterOut }
+            .groupBy { clazz -> clazz.simpleName }
     }
 
     override fun check(item: JavaClass, events: ConditionEvents) {
-        if (item.shouldIgnore) {
-            return
-        }
-
-        testClassesBySimpleClassName[item.simpleName + SUFFIX_TEST].isEmpty {
+        if (item.shouldIgnore) return
+        testClassesBySimpleClassName[item.simpleName + SUFFIX_TEST].isMissing {
             events.add(violated(item, "${item.name} does not have a test class"))
         }
     }

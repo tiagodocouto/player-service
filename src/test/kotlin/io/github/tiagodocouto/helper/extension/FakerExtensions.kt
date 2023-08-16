@@ -20,18 +20,17 @@
 
 package io.github.tiagodocouto.helper.extension
 
-/**
- * [ListExtensions]
- * Some helper extensions for [List]
- */
-object ListExtensions {
-    /**
-     * [List.isEmpty]
-     * Executes [block] if [List] is empty
-     */
-    fun List<*>?.isEmpty(block: () -> Unit) {
-        if (this?.isEmpty() == true) {
-            block()
-        }
-    }
+import io.github.serpro69.kfaker.Faker
+import io.github.serpro69.kfaker.faker
+import java.time.Instant
+
+object FakerExtensions {
+    val faker: Faker
+        get() = faker { }
+
+    fun Faker.uuid(): String =
+        random.nextUUID()
+
+    fun Faker.instant(): Instant =
+        Instant.ofEpochMilli(random.nextLong())
 }

@@ -23,7 +23,6 @@ package io.github.tiagodocouto.helper.spec
 import com.tngtech.archunit.junit.ArchTest
 import com.tngtech.archunit.lang.ArchRule
 import com.tngtech.archunit.lang.Priority.HIGH
-import com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition.priority
 import com.tngtech.archunit.library.GeneralCodingRules.NO_CLASSES_SHOULD_THROW_GENERIC_EXCEPTIONS
 import com.tngtech.archunit.library.GeneralCodingRules.NO_CLASSES_SHOULD_USE_FIELD_INJECTION
@@ -32,20 +31,15 @@ import com.tngtech.archunit.library.GeneralCodingRules.NO_CLASSES_SHOULD_USE_JOD
 import com.tngtech.archunit.library.GeneralCodingRules.testClassesShouldResideInTheSamePackageAsImplementation
 import io.github.tiagodocouto.helper.rule.ArchConditionShouldHaveTestForClass
 import org.springframework.data.mongodb.core.mapping.Document
+import org.springframework.stereotype.Controller
 import org.springframework.stereotype.Repository
 import org.springframework.stereotype.Service
 
-private const val SUFFIX_TEST = "Test"
 private const val SUFFIX_EXCEPTION = "Exception"
-private const val PACKAGE_BASE = "dev.realmkit.game"
-private const val PACKAGE_BASE_CORE = "$PACKAGE_BASE.core.."
-private const val PACKAGE_BASE_CORE_EXCEPTION = "${PACKAGE_BASE_CORE}exception.."
-private const val PACKAGE_BASE_DOMAIN = "$PACKAGE_BASE.domain.."
-private const val PACKAGE_BASE_DOMAIN_DOCUMENT = "${PACKAGE_BASE_DOMAIN}document.."
-private const val PACKAGE_BASE_DOMAIN_REPOSITORY = "${PACKAGE_BASE_DOMAIN}repository.."
-private const val PACKAGE_BASE_DOMAIN_SERVICE = "${PACKAGE_BASE_DOMAIN}service.."
+private const val PACKAGE_BASE = "io.github.tiagodocouto.playerservice"
 private const val PACKAGE_BASE_APP = "$PACKAGE_BASE.app.."
-private const val PACKAGE_BASE_SPRING = "org.springframework.."
+private const val PACKAGE_BASE_DOMAIN = "$PACKAGE_BASE.domain.."
+private const val PACKAGE_BASE_INFRA = "$PACKAGE_BASE.infra.."
 
 /**
  * A [ArchTestSpec] extends [TestSpec] with all default Arch Test
@@ -85,8 +79,8 @@ abstract class ArchTestSpec : TestSpec() {
      */
     @ArchTest
     val allClassShouldHaveTest: ArchRule =
-        classes()
-            .should(ArchConditionShouldHaveTestForClass)
+        priority(HIGH)
+            .classes().should(ArchConditionShouldHaveTestForClass)
             .`as`("All classes should have test")
 
     /**
@@ -97,86 +91,73 @@ abstract class ArchTestSpec : TestSpec() {
         testClassesShouldResideInTheSamePackageAsImplementation()
 
     /**
-     * Certify that CORE layer does not access the DOMAIN or APP layers
+     * Certify that all Classes inside the INFRA layer
+     * won't access any APP layer classes
      */
     @ArchTest
-    val noDomainOrAppInsideCore: ArchRule =
+    val noInfraInsideAppLayer: ArchRule =
         priority(HIGH)
-            .noClasses().that().resideInAPackage(PACKAGE_BASE_CORE)
-            .should().dependOnClassesThat().resideInAnyPackage(
-                PACKAGE_BASE_DOMAIN,
-                PACKAGE_BASE_APP,
-                PACKAGE_BASE_SPRING
-            )
+            .noClasses().that().resideInAPackage(PACKAGE_BASE_INFRA)
+            .should().dependOnClassesThat().resideInAnyPackage(PACKAGE_BASE_APP)
 
     /**
-     * Certify that DOMAIN layer does not access the APP layer
+     * Certify that all Classes inside the APP layer
+     * won't access any INFRA layer classes
      */
     @ArchTest
-    val noAppInsideDomain: ArchRule =
+    val noAppInsideInfraLayer: ArchRule =
+        priority(HIGH)
+            .noClasses().that().resideInAPackage(PACKAGE_BASE_APP)
+            .should().dependOnClassesThat().resideInAnyPackage(PACKAGE_BASE_INFRA)
+
+    /**
+     * Certify that all Classes inside the DOMAIN layer
+     * won't access any APP layer classes
+     */
+    @ArchTest
+    val noAppInsideDomainLayer: ArchRule =
         priority(HIGH)
             .noClasses().that().resideInAPackage(PACKAGE_BASE_DOMAIN)
             .should().dependOnClassesThat().resideInAnyPackage(PACKAGE_BASE_APP)
 
     /**
-     * Certify that annotated DOCUMENTS are inside DOMAIN DOCUMENT package only
+     * Certify that annotated DOCUMENTS are inside DOMAIN layer only
      */
     @ArchTest
     val documentsShouldResideInsideDomainDocument: ArchRule =
         priority(HIGH)
             .classes().that().areAnnotatedWith(Document::class.java)
-            .should().resideInAPackage(PACKAGE_BASE_DOMAIN_DOCUMENT)
+            .should().resideInAPackage(PACKAGE_BASE_DOMAIN)
 
     /**
-     * Certify that REPOSITORIES are annotated and inside the DOMAIN REPOSITORY package
+     * Certify that REPOSITORIES are annotated and inside the INFRA layer only
      */
     @ArchTest
-    val repositoriesShouldBeAnnotated: ArchRule =
-        priority(HIGH)
-            .classes().that().resideInAPackage(PACKAGE_BASE_DOMAIN_REPOSITORY)
-            .and().areNotAnonymousClasses()
-            .and().haveSimpleNameNotEndingWith(SUFFIX_TEST)
-            .should().beAnnotatedWith(Repository::class.java)
-            .andShould().beInterfaces()
-
-    /**
-     * Certify that annotated REPOSITORIES are inside the DOMAIN REPOSITORY package only
-     */
-    @ArchTest
-    val repositoriesShouldResideInsideDomainRepository: ArchRule =
+    val repositoriesShouldBeInInfraLayer: ArchRule =
         priority(HIGH)
             .classes().that().areAnnotatedWith(Repository::class.java)
-            .should().resideInAPackage(PACKAGE_BASE_DOMAIN_REPOSITORY)
+            .should().beInterfaces()
+            .andShould().resideInAPackage(PACKAGE_BASE_INFRA)
 
     /**
-     * Certify that SERVICES are annotated and inside DOMAIN SERVICE package
+     * Certify that SERVICES are annotated and inside DOMAIN layer
      */
     @ArchTest
-    val servicesShouldBeAnnotated: ArchRule =
-        priority(HIGH)
-            .classes().that().resideInAPackage(PACKAGE_BASE_DOMAIN_SERVICE)
-            .and().areNotAnonymousClasses()
-            .and().haveSimpleNameNotEndingWith(SUFFIX_TEST)
-            .and().areNotInnerClasses()
-            .should().beAnnotatedWith(Service::class.java)
-
-    /**
-     * Certify that annotated SERVICES are inside DOMAIN SERVICE package only
-     */
-    @ArchTest
-    val servicesShouldResideInsideDomainService: ArchRule =
+    val servicesShouldBeInDomainLayer: ArchRule =
         priority(HIGH)
             .classes().that().areAnnotatedWith(Service::class.java)
-            .should().resideInAPackage(PACKAGE_BASE_DOMAIN_SERVICE)
+            .should().notBeInnerClasses()
+            .andShould().resideInAPackage(PACKAGE_BASE_DOMAIN)
 
     /**
-     * Certify that EXCEPTIONS are inside CORE EXCEPTION package only
+     * Certify that SERVICES are annotated and inside DOMAIN layer
      */
     @ArchTest
-    val exceptionsShouldResideInsideCoreException: ArchRule =
+    val controllersShouldBeInAppLayer: ArchRule =
         priority(HIGH)
-            .classes().that().haveSimpleNameEndingWith(SUFFIX_EXCEPTION)
-            .should().resideInAPackage(PACKAGE_BASE_CORE_EXCEPTION)
+            .classes().that().areAnnotatedWith(Controller::class.java)
+            .should().notBeInnerClasses()
+            .andShould().resideInAPackage(PACKAGE_BASE_APP)
 
     /**
      * Certify that EXCEPTIONS extend Extension
