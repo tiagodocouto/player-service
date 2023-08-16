@@ -17,6 +17,8 @@
 '@doc':
   - '*.md'
   - '**/*.md'
+  - 'docs/*'
+  - 'docs/**/*'
 
 '@ci':
   - '.whitesource'

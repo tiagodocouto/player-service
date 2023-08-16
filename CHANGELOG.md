@@ -7,20 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ___
 
-## 1.0 - WIP
+## 0.1 - WIP
 
-> ### `Player`
+> ### `Documentation`
+> <details>
+>   <summary>Added high level system design diagram</summary>
+>   <img src="docs/architecture.jpg" alt="architecture"/>
+> </details>
+
+> ### `Initial Setup`
+> [Adding dependencies and plugins for the project](gradle/libs.versions.toml)
 >
-> > Player description
-> - [ ] todos
-
-### [Dependencies](gradle/libs.versions.toml)
-
-- Working with 💜 `Kotlin` latest version
-- Added `Kotest` library for the best Kotlin test framework
-- Added `Detekt` plugin for Code Quality
-- Added `Spotless` plugin for Code Quality
-- [WIP] Added `Sonarqube` plugin for Code Coverage
-- [WIP] Added `Kotlinx` for dealing with concurrency
-- [WIP] Added `Dokka` plugin for generating KDoc documentation
-- [WIP] Added `Konform` library for data validation
+> - [x] 💜 `Kotlin` latest version
+> - [x] `Kotest` library for the best Kotlin test framework
+> - [x] `Detekt` plugin for Code Quality
+> - [x] `Spotless` plugin for Code Quality
+> - [x] `Sonarqube` plugin for Code Coverage
+> - [ ] `Dokka` plugin for generating KDoc documentation
+> - [ ] `Kotlinx` for concurrency
