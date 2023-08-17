@@ -32,6 +32,8 @@ plugins {
     // Spring
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.management)
+    // Testing
+    alias(libs.plugins.tests.allure)
     // Quality
     alias(libs.plugins.quality.versions)
     alias(libs.plugins.quality.catalog)
@@ -128,6 +130,7 @@ tasks {
             test,
         )
         finalizedBy(
+            allureReport,
             dependencyUpdates,
         )
     }
@@ -139,4 +142,8 @@ configurations {
     developmentOnly
     runtimeClasspath { extendsFrom(configurations.developmentOnly.get()) }
     compileOnly { extendsFrom(configurations.annotationProcessor.get()) }
+}
+
+allure {
+    version = "2.19.0"
 }
