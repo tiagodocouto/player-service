@@ -18,25 +18,24 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.tiagodocouto.playerservice.infra.player
+package io.github.tiagodocouto.playerservice.domain.player.document
 
-import io.github.tiagodocouto.playerservice.domain.player.document.Player
-import org.springframework.data.mongodb.repository.MongoRepository
-import org.springframework.stereotype.Repository
+import io.github.tiagodocouto.playerservice.domain.base.BaseDocument
+import org.springframework.data.mongodb.core.index.Indexed
+import org.springframework.data.mongodb.core.mapping.Document
 
 /**
- * # [PlayerRepository]
- * the [Player] Mongo Repository interface.
- * @see MongoRepository
+ * # [Player]
+ * defines a Player document
+ * @property externalId player external identification
+ * @property name player name
+ * @see BaseDocument
  */
-@Repository
-interface PlayerRepository : MongoRepository<Player, String> {
-    /**
-     * [PlayerRepository.findByExternalId]
-     * Finds a [Player] by its [externalId]
-     *
-     * @param externalId the [Player] external id
-     * @return the [Player] found or null
-     */
-    fun findByExternalId(externalId: String): Player?
+@Document
+data class Player(
+    @Indexed(unique = true)
+    val externalId: String,
+    val name: String,
+) : BaseDocument() {
+    companion object
 }

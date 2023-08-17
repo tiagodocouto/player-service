@@ -18,8 +18,10 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.tiagodocouto.playerservice.domain.player
+package io.github.tiagodocouto.playerservice.domain.player.service
 
+import io.github.tiagodocouto.playerservice.domain.player.document.Player
+import io.github.tiagodocouto.playerservice.domain.player.exception.PlayerNotFoundException
 import io.github.tiagodocouto.playerservice.infra.player.PlayerRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -55,14 +57,18 @@ class PlayerService(
     /**
      * [PlayerService.byExternalId]
      * Finds a [Player] by its [externalId] and executes [block] with the found [Player]
+     * or throws a [PlayerNotFoundException] if the [Player] was not found
      *
      * @param externalId the [Player] external id
      * @param block the function to be executed with the found [Player]
-     * @return the found [Player] or null
+     * @return the found [Player]
+     * @throws PlayerNotFoundException if the [Player] was not found
      */
+    @Throws(PlayerNotFoundException::class)
     fun byExternalId(
         externalId: String,
         block: ((Player) -> Unit)? = null,
-    ): Player? = playerRepository.findByExternalId(externalId)
+    ): Player = playerRepository.findByExternalId(externalId)
         ?.also { found -> block?.invoke(found) }
+        ?: throw PlayerNotFoundException(externalId)
 }

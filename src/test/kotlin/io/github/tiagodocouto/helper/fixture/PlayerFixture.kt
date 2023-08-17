@@ -23,7 +23,7 @@ package io.github.tiagodocouto.helper.fixture
 import io.github.tiagodocouto.helper.extension.FakerExtensions.faker
 import io.github.tiagodocouto.helper.extension.FakerExtensions.name
 import io.github.tiagodocouto.helper.extension.FakerExtensions.uuid
-import io.github.tiagodocouto.playerservice.domain.player.Player
+import io.github.tiagodocouto.playerservice.domain.player.document.Player
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.arbitrary
 

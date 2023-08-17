@@ -18,11 +18,14 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.tiagodocouto.playerservice.domain.player
+package io.github.tiagodocouto.playerservice.domain.player.service
 
 import io.github.tiagodocouto.helper.fixture.PlayerFixture.arbitrary
 import io.github.tiagodocouto.helper.infra.IntegrationTestContext
 import io.github.tiagodocouto.helper.spec.IntegrationTestSpec
+import io.github.tiagodocouto.playerservice.domain.player.document.Player
+import io.github.tiagodocouto.playerservice.domain.player.exception.PlayerNotFoundException
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.property.checkAll
@@ -49,9 +52,7 @@ class PlayerServiceTest(
     suspend fun `should find a Player byExternalId`() {
         checkAll(Player.arbitrary) { player ->
             val saved = playerService.save(player)
-            playerService.byExternalId(
-                externalId = saved.externalId,
-            ) {
+            playerService.byExternalId(externalId = saved.externalId) {
                 it.id shouldBe saved.id
                 it.createdAt.epochSecond shouldBe saved.createdAt.epochSecond
                 it.updatedAt.epochSecond shouldBe saved.updatedAt.epochSecond
@@ -59,6 +60,13 @@ class PlayerServiceTest(
                 it.externalId shouldBe saved.externalId
                 it.name shouldBe saved.name
             }
+        }
+    }
+
+    @Test
+    suspend fun `should not find a Player byExternalId`() {
+        shouldThrow<PlayerNotFoundException> {
+            playerService.byExternalId(externalId = "ANY_NOT_EXISTING_ID")
         }
     }
 }

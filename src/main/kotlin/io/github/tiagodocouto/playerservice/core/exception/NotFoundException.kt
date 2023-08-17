@@ -18,24 +18,18 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.tiagodocouto.playerservice.domain.player
+package io.github.tiagodocouto.playerservice.core.exception
 
-import io.github.tiagodocouto.playerservice.domain.base.BaseDocument
-import org.springframework.data.mongodb.core.index.Indexed
-import org.springframework.data.mongodb.core.mapping.Document
+import kotlin.reflect.KClass
 
 /**
- * # [Player]
- * defines a Player document
- * @property externalId player external identification
- * @property name player name
- * @see BaseDocument
+ * # [NotFoundException]
+ * defines a not found exception
+ *
+ * @param entity entity class
+ * @param value entity value that was not found
  */
-@Document
-data class Player(
-    @Indexed(unique = true)
-    val externalId: String,
-    val name: String,
-) : BaseDocument() {
-    companion object
-}
+open class NotFoundException(
+    entity: KClass<*>,
+    value: String,
+) : RuntimeException("${entity.simpleName} not found: $value")

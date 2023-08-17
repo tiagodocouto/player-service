@@ -27,8 +27,9 @@ import com.tngtech.archunit.lang.SimpleConditionEvent.violated
 import io.github.tiagodocouto.playerservice.core.extension.ListExtensions.isMissing
 
 private const val SUFFIX_TEST = "Test"
-private const val SUFFIX_EXTENSION = "Extensions"
 private const val SUFFIX_KT = "Kt"
+private const val SUFFIX_EXTENSION = "Extensions"
+private const val SUFFIX_EXCEPTION = "Exception"
 private const val IS_ANONYMOUS_CLASS = "$"
 typealias TestClassesBySimpleClassName = Map<String, List<JavaClass>>
 
@@ -41,6 +42,7 @@ object ArchConditionShouldHaveTestForClass : ArchCondition<JavaClass>("should ha
         get() = simpleName.endsWith(SUFFIX_TEST) ||
             simpleName.endsWith(SUFFIX_KT) ||
             simpleName.endsWith(SUFFIX_EXTENSION) ||
+            simpleName.endsWith(SUFFIX_EXCEPTION) ||
             name.contains(IS_ANONYMOUS_CLASS) ||
             isInterface ||
             isAnonymousClass

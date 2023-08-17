@@ -18,25 +18,22 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.tiagodocouto.playerservice.infra.player
+package io.github.tiagodocouto.playerservice.domain.player.document
 
-import io.github.tiagodocouto.playerservice.domain.player.document.Player
-import org.springframework.data.mongodb.repository.MongoRepository
-import org.springframework.stereotype.Repository
+import io.github.tiagodocouto.helper.fixture.PlayerFixture.arbitrary
+import io.github.tiagodocouto.helper.spec.TestSpec
+import io.kotest.assertions.asClue
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.property.checkAll
 
-/**
- * # [PlayerRepository]
- * the [Player] Mongo Repository interface.
- * @see MongoRepository
- */
-@Repository
-interface PlayerRepository : MongoRepository<Player, String> {
-    /**
-     * [PlayerRepository.findByExternalId]
-     * Finds a [Player] by its [externalId]
-     *
-     * @param externalId the [Player] external id
-     * @return the [Player] found or null
-     */
-    fun findByExternalId(externalId: String): Player?
+class PlayerTest : TestSpec() {
+    @Test
+    suspend fun `should create a Player`() {
+        checkAll(Player.arbitrary) { player ->
+            player.asClue {
+                it.externalId.shouldNotBeNull()
+                it.name.shouldNotBeNull()
+            }
+        }
+    }
 }

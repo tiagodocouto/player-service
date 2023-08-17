@@ -18,22 +18,17 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.tiagodocouto.playerservice.domain.player
+package io.github.tiagodocouto.playerservice.domain.player.exception
 
-import io.github.tiagodocouto.helper.fixture.PlayerFixture.arbitrary
-import io.github.tiagodocouto.helper.spec.TestSpec
-import io.kotest.assertions.asClue
-import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.property.checkAll
+import io.github.tiagodocouto.playerservice.core.exception.NotFoundException
+import io.github.tiagodocouto.playerservice.domain.player.document.Player
 
-class PlayerTest : TestSpec() {
-    @Test
-    suspend fun `should create a Player`() {
-        checkAll(Player.arbitrary) { player ->
-            player.asClue {
-                it.externalId.shouldNotBeNull()
-                it.name.shouldNotBeNull()
-            }
-        }
-    }
-}
+/**
+ * # [PlayerNotFoundException]
+ * defines a player not found exception
+ *
+ * @param id the player id that was not found
+ */
+class PlayerNotFoundException(
+    id: String,
+) : NotFoundException(Player::class, id)
