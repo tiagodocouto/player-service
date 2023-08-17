@@ -112,11 +112,11 @@ allure {
 }
 
 pitest {
-    threads = 4
-    failWhenNoMutations = false
+    threads = Runtime.getRuntime().availableProcessors()
     targetClasses = listOf("io.github.tiagodocouto.*")
     outputFormats = listOf("XML", "HTML")
     pitestVersion = "1.14.4"
+    mutators = listOf("STRONGER")
 }
 
 tasks {
