@@ -15,8 +15,10 @@ test-kotest = "5.6.2"
 test-kotest-allure = "1.3.0"
 test-kotest-arb = "2.1.2"
 test-kotest-konform = "1.0.2"
+test-kotest-pitest = "1.2.0"
 test-kotest-spring = "1.1.3"
 test-kotest-testcontainers = "2.0.2"
+test-pitest = "1.9.11"
 test-testcontainers = "1.18.3"
 
 [libraries]
@@ -45,6 +47,7 @@ test-kotest-arb = { module = "io.kotest.extensions:kotest-property-arbs", versio
 test-kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "test-kotest" }
 test-kotest-junit = { module = "io.kotest:kotest-runner-junit5", version.ref = "test-kotest" }
 test-kotest-konform = { module = "io.kotest.extensions:kotest-assertions-konform", version.ref = "test-kotest-konform" }
+test-kotest-pitest = { module = "io.kotest.extensions:kotest-extensions-pitest", version.ref = "test-kotest-pitest" }
 test-kotest-property = { module = "io.kotest:kotest-property", version.ref = "test-kotest" }
 test-kotest-spring = { module = "io.kotest.extensions:kotest-extensions-spring", version.ref = "test-kotest-spring" }
 test-kotest-testcontainers = { module = "io.kotest.extensions:kotest-extensions-testcontainers", version.ref = "test-kotest-testcontainers" }
@@ -81,6 +84,7 @@ test-kotest = [
     "test-kotest-assertions",
     "test-kotest-junit",
     "test-kotest-konform",
+    "test-kotest-pitest",
     "test-kotest-property",
     "test-kotest-spring",
     "test-kotest-testcontainers",
@@ -108,3 +112,4 @@ quality-versions = { id = "com.github.ben-manes.versions", version.ref = "qualit
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-management = { id = "io.spring.dependency-management", version.ref = "spring-management" }
 tests-allure = { id = "io.qameta.allure", version.ref = "test-allure" }
+tests-pitest = { id = "info.solidsoft.pitest", version.ref = "test-pitest" }

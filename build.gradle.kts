@@ -18,7 +18,6 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import com.diffplug.gradle.spotless.SpotlessExtension
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -34,6 +33,7 @@ plugins {
     alias(libs.plugins.spring.management)
     // Testing
     alias(libs.plugins.tests.allure)
+    alias(libs.plugins.tests.pitest)
     // Quality
     alias(libs.plugins.quality.versions)
     alias(libs.plugins.quality.catalog)
@@ -83,7 +83,9 @@ detekt {
     config.setFrom("$rootDir/detekt-config.yml")
 }
 
-configure<SpotlessExtension> {
+java { sourceCompatibility = JavaVersion.VERSION_20 }
+
+spotless {
     kotlin {
         target("src/main/**/*.kt")
         ktfmt()
@@ -105,6 +107,18 @@ configure<SpotlessExtension> {
     }
 }
 
+allure {
+    version = "2.19.0"
+}
+
+pitest {
+    threads = 4
+    failWhenNoMutations = false
+    targetClasses = listOf("io.github.tiagodocouto.*")
+    outputFormats = listOf("XML", "HTML")
+    pitestVersion = "1.14.4"
+}
+
 tasks {
     // Compile
     withType<KotlinCompile> {
@@ -119,7 +133,7 @@ tasks {
     withType<Test> { useJUnitPlatform() }
     // Code Quality
     withType<Detekt> {
-        reports.sarif.required.set(true)
+        reports.sarif.required = true
     }
     // Default Tasks
     check {
@@ -128,6 +142,7 @@ tasks {
             detekt,
             spotlessApply,
             test,
+            pitest,
         )
         finalizedBy(
             allureReport,
@@ -136,14 +151,8 @@ tasks {
     }
 }
 
-java { sourceCompatibility = JavaVersion.VERSION_20 }
-
 configurations {
     developmentOnly
     runtimeClasspath { extendsFrom(configurations.developmentOnly.get()) }
     compileOnly { extendsFrom(configurations.annotationProcessor.get()) }
-}
-
-allure {
-    version = "2.19.0"
 }

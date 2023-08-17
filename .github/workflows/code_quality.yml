@@ -21,10 +21,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          fetch-depth: 2
 
       - name: Qodana Scan
-        uses: JetBrains/qodana-action@main
+        uses: JetBrains/qodana-action@v2023.2
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
 
@@ -33,7 +33,7 @@ jobs:
         with:
           sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
 
-  analyze:
+  coverage:
     name: COVERAGE
     runs-on: ubuntu-latest
     permissions:
@@ -42,24 +42,16 @@ jobs:
       security-events: write
     strategy:
       fail-fast: false
-      matrix:
-        language: [ 'java' ]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          fetch-depth: 2
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
         with:
-          languages: ${{ matrix.language }}
-
-      - name: Set up JDK 20
-        uses: actions/setup-java@v3
-        with:
-          distribution: zulu
-          java-version: 20
+          languages: java
 
       - name: Cache Gradle Packages
         uses: actions/cache@v3
@@ -70,6 +62,12 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
 
+      - name: Set up JDK 20
+        uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 20
+
       - name: Cache SonarCloud Packages
         uses: actions/cache@v3
         with:
@@ -77,16 +75,16 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Build & Sonar
+      - name: Check + Sonar
+        run: ./gradlew check sonar --info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew check sonar --info
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
         with:
-          category: "/language:${{ matrix.language }}"
+          category: "/language:java"
 
       - name: Codecov Upload Coverage
         uses: codecov/codecov-action@v3
