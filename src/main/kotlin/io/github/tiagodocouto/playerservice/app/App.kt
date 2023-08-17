@@ -21,13 +21,19 @@
 package io.github.tiagodocouto.playerservice.app
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
+import org.springframework.data.mongodb.config.EnableMongoAuditing
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
 
 /**
  * The main class of the application.
  * @see SpringBootApplication
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = ["io.github.tiagodocouto.playerservice"])
+@EnableMongoAuditing
+@EnableMongoRepositories("io.github.tiagodocouto.playerservice.infra")
+@ConfigurationPropertiesScan
 class App
 
 /**

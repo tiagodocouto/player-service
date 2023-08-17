@@ -21,6 +21,8 @@
 package io.github.tiagodocouto.playerservice.domain.player
 
 import io.github.tiagodocouto.playerservice.domain.base.BaseDocument
+import org.springframework.data.mongodb.core.index.Indexed
+import org.springframework.data.mongodb.core.mapping.Document
 
 /**
  * # [Player]
@@ -29,7 +31,9 @@ import io.github.tiagodocouto.playerservice.domain.base.BaseDocument
  * @property name player name
  * @see BaseDocument
  */
+@Document
 data class Player(
+    @Indexed(unique = true)
     val externalId: String,
     val name: String,
 ) : BaseDocument() {

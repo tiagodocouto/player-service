@@ -18,22 +18,25 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.tiagodocouto.helper.extension
+package io.github.tiagodocouto.playerservice.infra.player
 
-import io.github.serpro69.kfaker.Faker
-import io.github.serpro69.kfaker.faker
-import java.time.Instant
+import io.github.tiagodocouto.playerservice.domain.player.Player
+import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.stereotype.Repository
 
-object FakerExtensions {
-    val faker: Faker
-        get() = faker { }
-
-    fun Faker.uuid(): String =
-        random.nextUUID()
-
-    fun Faker.name(): String =
-        worldOfWarcraft.hero()
-
-    fun Faker.instant(): Instant =
-        Instant.ofEpochMilli(random.nextLong())
+/**
+ * # [PlayerRepository]
+ * the [Player] Mongo Repository interface.
+ * @see MongoRepository
+ */
+@Repository
+interface PlayerRepository : MongoRepository<Player, String> {
+    /**
+     * [PlayerRepository.findByExternalId]
+     * Finds a [Player] by its [externalId]
+     *
+     * @param externalId the [Player] external id
+     * @return the [Player] found or null
+     */
+    fun findByExternalId(externalId: String): Player?
 }

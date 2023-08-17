@@ -21,17 +21,18 @@
 package io.github.tiagodocouto.helper.fixture
 
 import io.github.tiagodocouto.helper.extension.FakerExtensions.faker
+import io.github.tiagodocouto.helper.extension.FakerExtensions.name
+import io.github.tiagodocouto.helper.extension.FakerExtensions.uuid
 import io.github.tiagodocouto.playerservice.domain.player.Player
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.arbitrary
-import io.kotest.property.arbitrary.uuid
 
 object PlayerFixture {
     val Player.Companion.arbitrary: Arb<Player>
         get() = arbitrary {
             Player(
-                externalId = Arb.uuid().bind().toString(),
-                name = faker.worldOfWarcraft.hero(),
+                externalId = faker.uuid(),
+                name = faker.name(),
             )
         }
 }
