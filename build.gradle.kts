@@ -113,16 +113,11 @@ allure {
 }
 
 pitest {
+    pitestVersion = "1.14.4"
     threads = Runtime.getRuntime().availableProcessors()
     targetClasses = listOf("io.github.tiagodocouto.*")
     outputFormats = listOf("XML", "HTML", "gitci")
-    pitestVersion = "1.14.4"
     mutators = listOf("ALL")
-    features = listOf("+GIT(from[HEAD~1])")
-}
-
-pitestGithub {
-    repoToken = System.getenv("GITHUB_TOKEN")
 }
 
 tasks {

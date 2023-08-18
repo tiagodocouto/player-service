@@ -23,6 +23,7 @@
                    REPORT_DIR="$PROJECT_DIR$/build/reports/pitest" SOURCE_DIRS="$PROJECT_DIR$/src/main/kotlin"
                    TARGET_CLASSES="io.github.tiagodocouto.*" TARGET_TESTS=""
                    otherParams="--outputFormats XML,HTML --threads 4">
+        <module name="player-service"/>
         <method v="2">
             <option name="Make" enabled="true"/>
         </method>
