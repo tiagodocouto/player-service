@@ -19,6 +19,11 @@ test-kotest-pitest = "1.2.0"
 test-kotest-spring = "1.1.3"
 test-kotest-testcontainers = "2.0.2"
 test-pitest = "1.9.11"
+test-pitest-base = "1.1.3"
+test-pitest-git = "1.1.1"
+test-pitest-github = "1.0.4"
+test-pitest-spring = "0.0.10"
+test-pitest-kotlin = "1.0.8"
 test-testcontainers = "1.18.3"
 
 [libraries]
@@ -51,6 +56,10 @@ test-kotest-pitest = { module = "io.kotest.extensions:kotest-extensions-pitest",
 test-kotest-property = { module = "io.kotest:kotest-property", version.ref = "test-kotest" }
 test-kotest-spring = { module = "io.kotest.extensions:kotest-extensions-spring", version.ref = "test-kotest-spring" }
 test-kotest-testcontainers = { module = "io.kotest.extensions:kotest-extensions-testcontainers", version.ref = "test-kotest-testcontainers" }
+test-pitest-base = { module = "com.groupcdg.arcmutate:base", version.ref = "test-pitest-base" }
+test-pitest-git = { module = "com.groupcdg:pitest-git-plugin", version.ref = "test-pitest-git" }
+test-pitest-kotlin = { module = "com.groupcdg.pitest:pitest-kotlin-plugin", version.ref = "test-pitest-kotlin" }
+test-pitest-spring = { module = "com.groupcdg.arcmutate:arcmutate-spring", version.ref = "test-pitest-spring" }
 test-spring-boot = { module = "org.springframework.boot:spring-boot-starter-test" }
 test-testcontainers-junit = { module = "org.testcontainers:junit-jupiter", version.ref = "test-testcontainers" }
 test-testcontainers-mongodb = { module = "org.testcontainers:mongodb", version.ref = "test-testcontainers" }
@@ -92,6 +101,12 @@ test-kotest = [
 test-mocks = [
     "test-faker",
 ]
+test-pitest = [
+    "test-pitest-base",
+    "test-pitest-git",
+    "test-pitest-kotlin",
+    "test-pitest-spring",
+]
 test-spring-boot = [
     "test-spring-boot",
 ]
@@ -113,3 +128,4 @@ spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-management = { id = "io.spring.dependency-management", version.ref = "spring-management" }
 tests-allure = { id = "io.qameta.allure", version.ref = "test-allure" }
 tests-pitest = { id = "info.solidsoft.pitest", version.ref = "test-pitest" }
+tests-pitest-github = { id = "com.groupcdg.pitest.github", version.ref = "test-pitest-github" }

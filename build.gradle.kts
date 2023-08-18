@@ -34,6 +34,7 @@ plugins {
     // Testing
     alias(libs.plugins.tests.allure)
     alias(libs.plugins.tests.pitest)
+    alias(libs.plugins.tests.pitest.github)
     // Quality
     alias(libs.plugins.quality.versions)
     alias(libs.plugins.quality.catalog)
@@ -64,10 +65,10 @@ dependencies {
     testImplementation(libs.bundles.test.testcontainers)
     // Code Quality
     detektPlugins(libs.bundles.quality.deteket)
+    pitest(libs.bundles.test.pitest)
 }
 
 kover {
-    useJacoco()
     koverReport {
         defaults {
             this.xml { onCheck = true }
@@ -114,9 +115,14 @@ allure {
 pitest {
     threads = Runtime.getRuntime().availableProcessors()
     targetClasses = listOf("io.github.tiagodocouto.*")
-    outputFormats = listOf("XML", "HTML")
+    outputFormats = listOf("XML", "HTML", "gitci")
     pitestVersion = "1.14.4"
-    mutators = listOf("STRONGER")
+    mutators = listOf("ALL")
+    features = listOf("+GIT(from[HEAD~1])")
+}
+
+pitestGithub {
+    repoToken = System.getenv("GITHUB_TOKEN")
 }
 
 tasks {
@@ -142,7 +148,6 @@ tasks {
             detekt,
             spotlessApply,
             test,
-            pitest,
         )
         finalizedBy(
             allureReport,
