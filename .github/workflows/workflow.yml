@@ -1,4 +1,4 @@
-name: QUALITY
+name: QUALITY 🧪
 
 on:
   push:
@@ -9,98 +9,97 @@ on:
 
 jobs:
   LABELER:
-    name: LABELER
+    name: LABELER 🏷️
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/labeler@v4
+      - name: labeler 🏷️
+        uses: actions/labeler@v4
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
 
   QODANA:
-    name: QODANA
+    name: QODANA 🧰
     runs-on: ubuntu-latest
     permissions:
       actions: read
       contents: read
       security-events: write
     steps:
-      - name: checkout
+      - name: checkout 🛫
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: qodana scan
+      - name: qodana scan 🧪
         uses: JetBrains/qodana-action@v2023.2
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
 
-      - name: upload sarif - qodana
+      - name: upload sarif - qodana 🚀
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
 
   COVERAGE:
-    name: COVERAGE
+    name: COVERAGE 🧪
     runs-on: ubuntu-latest
     permissions:
       actions: read
-      contents: read
+      contents: write
+      pull-requests: write
       security-events: write
     strategy:
       fail-fast: false
     steps:
-      - name: checkout
+      - name: checkout 🛫
         uses: actions/checkout@v3
         with:
           fetch-depth: 2
 
-      - name: codeql init
+      - name: codeql init 🧰
         uses: github/codeql-action/init@v2
         with:
           languages: java
 
-      - name: setup java 20
+      - name: setup java 20 ☕️
         uses: actions/setup-java@v3
         with:
           distribution: zulu
           java-version: 20
 
-      - name: cache sonar
+      - name: setup gradle 🐘
+        uses: gradle/gradle-build-action@v2
+
+      - name: cache sonar 📦
         uses: actions/cache@v3
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: cache gradle
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
-
-      - name: gradle check sonar
+      - name: gradle check sonar 🧪
         run: ./gradlew check sonar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: codeql analyze
+      - name: pitest 🧟‍
+        run: ./gradlew pitest
+
+      - name: codeql analyze 🧪
         uses: github/codeql-action/analyze@v2
         with:
           category: "/language:java"
 
-      - name: upload coverage - codecov
+      - name: upload coverage - codecov 🚀
         uses: codecov/codecov-action@v3
         with:
           file: ${{ github.workspace }}/build/reports/kover/report.xml
 
-      - name: upload coverage - codeclimate
+      - name: upload coverage - codeclimate 🚀
         uses: paambaati/codeclimate-action@v4.0.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
@@ -108,49 +107,29 @@ jobs:
         with:
           coverageLocations: ${{ github.workspace }}/build/reports/kover/report.xml:jacoco
 
-      - name: upload sarif - detekt
+      - name: upload sarif - detekt 🚀
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: ${{ github.workspace }}/build/reports/detekt/detekt.sarif
 
-  PITEST:
-    name: PITEST
-    runs-on: ubuntu-latest
-    needs: [COVERAGE]
-    strategy:
-      fail-fast: false
-    permissions:
-      actions: write
-      contents: write
-      security-events: write
-      pull-requests: write
-    steps:
-      - name: checkout
-        uses: actions/checkout@v3
+      - name: deploy reports 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          fetch-depth: 2
+          folder: ${{ github.workspace }}/build/reports
 
-      - name: setup java 20
-        uses: actions/setup-java@v3
+      - name: add pr comment 🗿
+        uses: mshick/add-pr-comment@v2
         with:
-          distribution: zulu
-          java-version: 20
-
-      - name: cache gradle
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
-
-      - name: pitest
-        run: ./gradlew pitest
-
-      - uses: mshick/add-pr-comment@v2
-        with:
+          message-id: reports
+          refresh-message-position: true
           message-path: |
-            ${{ github.workspace }}/build/reports/pitest/summary.md
-          find: |
-            mutants
+            ${{ github.workspace }}/build/reports/**/*.md
+
+      - name: post status 🗿
+        uses: Sibz/github-status-action@v1
+        with:
+          authToken: ${{ secrets.GITHUB_TOKEN }}
+          context: Reports 🚀
+          state: success
+          sha: ${{ github.sha }}
+          target_url: https://tiagodocouto.github.io/player-services-github-pages/${{ github.run_number }}
