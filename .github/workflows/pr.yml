@@ -1,0 +1,139 @@
+name: QUALITY 🧪
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  LABELER:
+    name: LABELER 🏷️
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: labeler 🏷️
+        uses: actions/labeler@v4
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+
+  QODANA:
+    name: QODANA 🧰
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - name: checkout 🛫
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: qodana scan 🧪
+        uses: JetBrains/qodana-action@v2023.2
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+
+      - name: upload sarif - qodana 🚀
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
+
+  COVERAGE:
+    name: COVERAGE 🧪
+    runs-on: ubuntu-latest
+    permissions: write-all
+    strategy:
+      fail-fast: false
+    steps:
+      - name: checkout 🛫
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - name: codeql init 🧰
+        uses: github/codeql-action/init@v2
+        with:
+          languages: java
+
+      - name: setup java 20 ☕️
+        uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 20
+
+      - name: cache gradle 🐘
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('gradle.properties', 'build.gradle.kts', 'gradle/libs.versions.toml', 'gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle-${{ hashFiles('gradle.properties', 'build.gradle.kts', 'gradle/libs.versions.toml', 'gradle/wrapper/gradle-wrapper.properties') }}
+
+      - name: cache sonar 📦
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: gradle check sonar 🧪
+        run: ./gradlew check sonar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: pitest 🧟‍
+        run: ./gradlew pitest
+
+      - name: codeql analyze 🧪
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "/language:java"
+
+      - name: upload coverage - codecov 🚀
+        uses: codecov/codecov-action@v3
+        with:
+          file: ${{ github.workspace }}/build/reports/kover/report.xml
+
+      - name: upload coverage - codeclimate 🚀
+        uses: paambaati/codeclimate-action@v4.0.0
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          JACOCO_SOURCE_PATH: "${{ github.workspace }}/src/main/kotlin"
+        with:
+          coverageLocations: ${{ github.workspace }}/build/reports/kover/report.xml:jacoco
+
+      - name: upload sarif - detekt 🚀
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: ${{ github.workspace }}/build/reports/detekt/detekt.sarif
+
+      - name: add pr comment - detekt 🗿
+        uses: mshick/add-pr-comment@v2
+        with:
+          message-id: reports-detekt
+          refresh-message-position: true
+          message-path: |
+            ${{ github.workspace }}/build/reports/detekt/*.md
+
+      - name: add pr comment - pitest 🗿
+        uses: mshick/add-pr-comment@v2
+        with:
+          message-id: reports-pitest
+          refresh-message-position: true
+          message-path: |
+            ${{ github.workspace }}/build/reports/pitest/*.md
+
+      - name: post status 🗿
+        uses: Sibz/github-status-action@v1.1.6
+        with:
+          authToken: ${{ secrets.GITHUB_TOKEN }}
+          state: success
+          context: Reports
+          description: Reports Results
+          sha: ${{ github.sha }}
+          target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}

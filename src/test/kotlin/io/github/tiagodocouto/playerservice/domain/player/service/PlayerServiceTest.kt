@@ -28,6 +28,7 @@ import io.github.tiagodocouto.playerservice.domain.player.exception.PlayerNotFou
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldNotBeEmpty
 import io.kotest.property.checkAll
 
 @IntegrationTestContext
@@ -38,12 +39,12 @@ class PlayerServiceTest(
     suspend fun `should save a Player`() {
         checkAll(Player.arbitrary) { player ->
             playerService.save(player) {
-                it.id.shouldNotBeNull()
+                it.id.shouldNotBeEmpty()
                 it.createdAt.shouldNotBeNull()
                 it.updatedAt.shouldNotBeNull()
-                it.version.shouldNotBeNull()
-                it.externalId.shouldNotBeNull()
-                it.name.shouldNotBeNull()
+                it.version.shouldNotBeEmpty()
+                it.externalId.shouldNotBeEmpty()
+                it.name.shouldNotBeEmpty()
             }
         }
     }

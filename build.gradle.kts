@@ -18,7 +18,6 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import com.diffplug.gradle.spotless.SpotlessExtension
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -34,6 +33,8 @@ plugins {
     alias(libs.plugins.spring.management)
     // Testing
     alias(libs.plugins.tests.allure)
+    alias(libs.plugins.tests.pitest)
+    alias(libs.plugins.tests.pitest.github)
     // Quality
     alias(libs.plugins.quality.versions)
     alias(libs.plugins.quality.catalog)
@@ -64,10 +65,10 @@ dependencies {
     testImplementation(libs.bundles.test.testcontainers)
     // Code Quality
     detektPlugins(libs.bundles.quality.deteket)
+    pitest(libs.bundles.test.pitest)
 }
 
 kover {
-    useJacoco()
     koverReport {
         defaults {
             this.xml { onCheck = true }
@@ -83,7 +84,9 @@ detekt {
     config.setFrom("$rootDir/detekt-config.yml")
 }
 
-configure<SpotlessExtension> {
+java { sourceCompatibility = JavaVersion.VERSION_20 }
+
+spotless {
     kotlin {
         target("src/main/**/*.kt")
         ktfmt()
@@ -105,6 +108,18 @@ configure<SpotlessExtension> {
     }
 }
 
+allure {
+    version = "2.19.0"
+}
+
+pitest {
+    pitestVersion = "1.14.4"
+    threads = Runtime.getRuntime().availableProcessors()
+    targetClasses = listOf("io.github.tiagodocouto.*")
+    outputFormats = listOf("XML", "HTML", "gitci")
+    mutators = listOf("ALL")
+}
+
 tasks {
     // Compile
     withType<KotlinCompile> {
@@ -119,7 +134,7 @@ tasks {
     withType<Test> { useJUnitPlatform() }
     // Code Quality
     withType<Detekt> {
-        reports.sarif.required.set(true)
+        reports.sarif.required = true
     }
     // Default Tasks
     check {
@@ -136,14 +151,8 @@ tasks {
     }
 }
 
-java { sourceCompatibility = JavaVersion.VERSION_20 }
-
 configurations {
     developmentOnly
     runtimeClasspath { extendsFrom(configurations.developmentOnly.get()) }
     compileOnly { extendsFrom(configurations.annotationProcessor.get()) }
-}
-
-allure {
-    version = "2.19.0"
 }
