@@ -3,23 +3,8 @@ name: QUALITY 🧪
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
-    types: [opened, synchronize, reopened]
 
 jobs:
-  LABELER:
-    name: LABELER 🏷️
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-    steps:
-      - name: labeler 🏷️
-        uses: actions/labeler@v4
-        with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
-
   QODANA:
     name: QODANA 🧰
     runs-on: ubuntu-latest
@@ -46,11 +31,7 @@ jobs:
   COVERAGE:
     name: COVERAGE 🧪
     runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: write
-      pull-requests: write
-      security-events: write
+    permissions: write-all
     strategy:
       fail-fast: false
     steps:
@@ -70,8 +51,14 @@ jobs:
           distribution: zulu
           java-version: 20
 
-      - name: setup gradle 🐘
-        uses: gradle/gradle-build-action@v2
+      - name: cache gradle 🐘
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('gradle.properties', 'build.gradle.kts', 'gradle/libs.versions.toml', 'gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle-${{ hashFiles('gradle.properties', 'build.gradle.kts', 'gradle/libs.versions.toml', 'gradle/wrapper/gradle-wrapper.properties') }}
 
       - name: cache sonar 📦
         uses: actions/cache@v3
@@ -111,25 +98,3 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: ${{ github.workspace }}/build/reports/detekt/detekt.sarif
-
-      - name: deploy reports 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: ${{ github.workspace }}/build/reports
-
-      - name: add pr comment 🗿
-        uses: mshick/add-pr-comment@v2
-        with:
-          message-id: reports
-          refresh-message-position: true
-          message-path: |
-            ${{ github.workspace }}/build/reports/**/*.md
-
-      - name: post status 🗿
-        uses: Sibz/github-status-action@v1
-        with:
-          authToken: ${{ secrets.GITHUB_TOKEN }}
-          context: Reports 🚀
-          state: success
-          sha: ${{ github.sha }}
-          target_url: https://tiagodocouto.github.io/player-services-github-pages/${{ github.run_number }}
