@@ -123,45 +123,6 @@ jobs:
           message-path: |
             ${{ github.workspace }}/build/reports/pitest/*.md
 
-      - name: codeql analyze 🧪
-        uses: github/codeql-action/analyze@v2
-        with:
-          category: "/language:java"
-
-      - name: upload coverage - codecov 🚀
-        uses: codecov/codecov-action@v3
-        with:
-          file: ${{ github.workspace }}/build/reports/kover/report.xml
-
-      - name: upload coverage - codeclimate 🚀
-        uses: paambaati/codeclimate-action@v4.0.0
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-          JACOCO_SOURCE_PATH: "${{ github.workspace }}/src/main/kotlin"
-        with:
-          coverageLocations: ${{ github.workspace }}/build/reports/kover/report.xml:jacoco
-
-      - name: upload sarif - detekt 🚀
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: ${{ github.workspace }}/build/reports/detekt/detekt.sarif
-
-      - name: add pr comment - detekt 🗿
-        uses: mshick/add-pr-comment@v2
-        with:
-          message-id: reports-detekt
-          refresh-message-position: true
-          message-path: |
-            ${{ github.workspace }}/build/reports/detekt/*.md
-
-      - name: add pr comment - pitest 🗿
-        uses: mshick/add-pr-comment@v2
-        with:
-          message-id: reports-pitest
-          refresh-message-position: true
-          message-path: |
-            ${{ github.workspace }}/build/reports/pitest/*.md
-
       - name: add pr comment - badge 🗿
         uses: mshick/add-pr-comment@v2
         with:
