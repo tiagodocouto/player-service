@@ -34,10 +34,11 @@ jobs:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
           cache-default-branch-only: true
 
-      - name: upload sarif - qodana 🚀
-        uses: github/codeql-action/upload-sarif@v2
+      - name: Upload artifact 🚀
+        uses: actions/upload-artifact@v3
         with:
-          sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
+          path: |
+            - ${{ runner.temp }}/qodana/results/qodana.sarif.json
 
   COVERAGE:
     name: COVERAGE 🧪
@@ -46,7 +47,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest , macos-latest , windows-latest ]
+        os: [ ubuntu-latest ]
         java: [ 20 ]
     steps:
       - name: checkout 🛫
@@ -80,14 +81,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      - name: add pr comment - gradle 🗿 (on failure ❌)
-        if: failure()
-        uses: mshick/add-pr-comment@v2
-        with:
-          message-id: reports-pitest
-          refresh-message-position: true
-          message: "❌ ${{ github.workflow }} failed: ${{ steps.gradle.outputs.build-scan-url }}"
 
       - name: pitest 🧟‍
         run: ./gradlew pitest
@@ -130,3 +123,71 @@ jobs:
           refresh-message-position: true
           message-path: |
             ${{ github.workspace }}/build/reports/pitest/*.md
+
+      - name: Upload artifact 🚀
+        uses: actions/upload-artifact@v3
+        with:
+          path: |
+            - ${{ github.workspace }}/build/reports/**/.xml
+            - ${{ github.workspace }}/build/reports/**/.sarif
+            - ${{ github.workspace }}/build/reports/**/.md
+
+  PUBLISH_LOGS:
+    name: PUBLISH LOGS 🗿
+    runs-on: ubuntu-latest
+    permissions: write-all
+    needs: [ QODANA , COVERAGE ]
+    steps:
+      - name: download artifact 🧰
+        uses: actions/download-artifact@v2
+
+      - name: upload sarif - qodana 🚀
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
+
+      - name: codeql analyze 🧪
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "/language:java"
+
+      - name: upload coverage - codecov 🚀
+        uses: codecov/codecov-action@v3
+        with:
+          file: ${{ github.workspace }}/build/reports/kover/report.xml
+
+      - name: upload coverage - codeclimate 🚀
+        uses: paambaati/codeclimate-action@v4.0.0
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          JACOCO_SOURCE_PATH: "${{ github.workspace }}/src/main/kotlin"
+        with:
+          coverageLocations: ${{ github.workspace }}/build/reports/kover/report.xml:jacoco
+
+      - name: upload sarif - detekt 🚀
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: ${{ github.workspace }}/build/reports/detekt/detekt.sarif
+
+      - name: add pr comment - detekt 🗿
+        uses: mshick/add-pr-comment@v2
+        with:
+          message-id: reports-detekt
+          refresh-message-position: true
+          message-path: |
+            ${{ github.workspace }}/build/reports/detekt/*.md
+
+      - name: add pr comment - pitest 🗿
+        uses: mshick/add-pr-comment@v2
+        with:
+          message-id: reports-pitest
+          refresh-message-position: true
+          message-path: |
+            ${{ github.workspace }}/build/reports/pitest/*.md
+
+      - name: add pr comment - badge 🗿
+        uses: mshick/add-pr-comment@v2
+        with:
+          message-id: reports-badge
+          refresh-message-position: true
+          message: "[![Code Quality](https://github.com/tiagodocouto/player-service/actions/workflows/pr.yml/badge.svg)](https://github.com/tiagodocouto/player-service)"
