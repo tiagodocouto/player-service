@@ -122,10 +122,3 @@ jobs:
           refresh-message-position: true
           message-path: |
             ${{ github.workspace }}/build/reports/pitest/*.md
-
-      - name: add pr comment - badge 🗿
-        uses: mshick/add-pr-comment@v2
-        with:
-          message-id: reports-badge
-          refresh-message-position: true
-          message: "[![Code Quality](https://github.com/tiagodocouto/player-service/actions/workflows/pr.yml/badge.svg)](https://github.com/tiagodocouto/player-service)"
