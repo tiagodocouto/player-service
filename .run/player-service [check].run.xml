@@ -38,7 +38,7 @@
     <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
     <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
     <EXTENSION ID="com.intellij.execution.ExternalSystemRunConfigurationJavaExtension">
-      <extension name="coverage" sample_coverage="false" runner="jacoco"/>
+      <extension name="coverage" sample_coverage="false"/>
     </EXTENSION>
     <DebugAllEnabled>false</DebugAllEnabled>
     <RunAsTest>true</RunAsTest>

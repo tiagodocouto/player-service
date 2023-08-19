@@ -43,10 +43,13 @@ jobs:
 
   COVERAGE:
     name: COVERAGE 🧪
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     permissions: write-all
     strategy:
       fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        java: [ 20 ]
     steps:
       - name: checkout 🛫
         uses: actions/checkout@v3
@@ -58,20 +61,14 @@ jobs:
         with:
           languages: java
 
-      - name: setup java 20 ☕️
+      - name: setup java ${{ matrix.java }} ☕️
         uses: actions/setup-java@v3
         with:
           distribution: zulu
-          java-version: 20
+          java-version: ${{ matrix.java }}
 
       - name: cache gradle 🐘
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('gradle.properties', 'build.gradle.kts', 'gradle/libs.versions.toml', 'gradle/wrapper/gradle-wrapper.properties') }}
-          restore-keys: ${{ runner.os }}-gradle-${{ hashFiles('gradle.properties', 'build.gradle.kts', 'gradle/libs.versions.toml', 'gradle/wrapper/gradle-wrapper.properties') }}
+        uses: gradle/gradle-build-action@v2
 
       - name: cache sonar 📦
         uses: actions/cache@v3
@@ -81,10 +78,18 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
 
       - name: gradle check sonar 🧪
-        run: ./gradlew check sonar
+        run: ./gradlew check sonar --scan
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: add pr comment - gradle 🗿 (on failure ❌)
+        if: failure()
+        uses: mshick/add-pr-comment@v2
+        with:
+          message-id: reports-pitest
+          refresh-message-position: true
+          message: "❌ ${{ github.workflow }} failed: ${{ steps.gradle.outputs.build-scan-url }}"
 
       - name: pitest 🧟‍
         run: ./gradlew pitest
