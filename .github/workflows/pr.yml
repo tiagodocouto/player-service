@@ -34,11 +34,10 @@ jobs:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
           cache-default-branch-only: true
 
-      - name: Upload artifact 🚀
-        uses: actions/upload-artifact@v3
+      - name: upload sarif - qodana 🚀
+        uses: github/codeql-action/upload-sarif@v2
         with:
-          path: |
-            - ${{ runner.temp }}/qodana/results/qodana.sarif.json
+          sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
 
   COVERAGE:
     name: COVERAGE 🧪
@@ -123,23 +122,6 @@ jobs:
           refresh-message-position: true
           message-path: |
             ${{ github.workspace }}/build/reports/pitest/*.md
-
-      - name: Upload artifact 🚀
-        uses: actions/upload-artifact@v3
-        with:
-          path: |
-            - ${{ github.workspace }}/build/reports/**/.xml
-            - ${{ github.workspace }}/build/reports/**/.sarif
-            - ${{ github.workspace }}/build/reports/**/.md
-
-  PUBLISH_LOGS:
-    name: PUBLISH LOGS 🗿
-    runs-on: ubuntu-latest
-    permissions: write-all
-    needs: [ QODANA , COVERAGE ]
-    steps:
-      - name: download artifact 🧰
-        uses: actions/download-artifact@v2
 
       - name: upload sarif - qodana 🚀
         uses: github/codeql-action/upload-sarif@v2
