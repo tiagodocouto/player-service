@@ -65,7 +65,7 @@ class PlayerServiceTest(
     }
 
     @Test
-    suspend fun `should not find a Player byExternalId`() {
+    fun `should not find a Player byExternalId`() {
         shouldThrow<PlayerNotFoundException> {
             playerService.byExternalId(externalId = "ANY_NOT_EXISTING_ID")
         }

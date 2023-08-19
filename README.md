@@ -13,7 +13,7 @@
 
 ## Badges
 
-[![Code Quality](https://github.com/tiagodocouto/player-service/actions/workflows/code_quality.yml/badge.svg)](https://github.com/tiagodocouto/player-service)
+[![Code Quality](https://github.com/tiagodocouto/player-service/actions/workflows/main.yml/badge.svg)](https://github.com/tiagodocouto/player-service)
 [![License](https://img.shields.io/github/license/tiagodocouto/player-service)](https://github.com/tiagodocouto/player-service)
 [![Kotlin](https://img.shields.io/github/languages/top/tiagodocouto/player-service)](https://kotlinlang.org/)
 

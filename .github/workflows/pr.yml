@@ -21,10 +21,7 @@ jobs:
   QODANA:
     name: QODANA 🧰
     runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
+    permissions: write-all
     steps:
       - name: checkout 🛫
         uses: actions/checkout@v3
@@ -35,6 +32,7 @@ jobs:
         uses: JetBrains/qodana-action@v2023.2
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+          cache-default-branch-only: true
 
       - name: upload sarif - qodana 🚀
         uses: github/codeql-action/upload-sarif@v2
@@ -43,10 +41,13 @@ jobs:
 
   COVERAGE:
     name: COVERAGE 🧪
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     permissions: write-all
     strategy:
       fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        java: [ 20 ]
     steps:
       - name: checkout 🛫
         uses: actions/checkout@v3
@@ -58,20 +59,14 @@ jobs:
         with:
           languages: java
 
-      - name: setup java 20 ☕️
+      - name: setup java ${{ matrix.java }} ☕️
         uses: actions/setup-java@v3
         with:
           distribution: zulu
-          java-version: 20
+          java-version: ${{ matrix.java }}
 
       - name: cache gradle 🐘
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('gradle.properties', 'build.gradle.kts', 'gradle/libs.versions.toml', 'gradle/wrapper/gradle-wrapper.properties') }}
-          restore-keys: ${{ runner.os }}-gradle-${{ hashFiles('gradle.properties', 'build.gradle.kts', 'gradle/libs.versions.toml', 'gradle/wrapper/gradle-wrapper.properties') }}
+        uses: gradle/gradle-build-action@v2
 
       - name: cache sonar 📦
         uses: actions/cache@v3
@@ -81,7 +76,7 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
 
       - name: gradle check sonar 🧪
-        run: ./gradlew check sonar
+        run: ./gradlew check sonar --scan
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -127,13 +122,3 @@ jobs:
           refresh-message-position: true
           message-path: |
             ${{ github.workspace }}/build/reports/pitest/*.md
-
-      - name: post status 🗿
-        uses: Sibz/github-status-action@v1.1.6
-        with:
-          authToken: ${{ secrets.GITHUB_TOKEN }}
-          state: success
-          context: Reports
-          description: Reports Results
-          sha: ${{ github.sha }}
-          target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
