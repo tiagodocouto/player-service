@@ -27,6 +27,7 @@ plugins {
     alias(libs.plugins.kotlinx.kover)
     // Kotlin
     alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.kotlin.spring)
     // Spring
     alias(libs.plugins.spring.boot)
@@ -57,6 +58,9 @@ dependencies {
     runtimeOnly(libs.kotlin.reflect)
     // Spring
     implementation(libs.bundles.spring.boot)
+    // Mappers
+    implementation(libs.mapstruct)
+    kapt(libs.mapstruct.processor)
     // Test
     testImplementation(libs.bundles.test.spring.boot)
     testImplementation(libs.bundles.test.archunit)

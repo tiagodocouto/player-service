@@ -23,6 +23,7 @@ package io.github.tiagodocouto.helper.fixture
 import io.github.tiagodocouto.helper.extension.FakerExtensions.faker
 import io.github.tiagodocouto.helper.extension.FakerExtensions.name
 import io.github.tiagodocouto.helper.extension.FakerExtensions.uuid
+import io.github.tiagodocouto.playerservice.app.player.client.PlayerRecord
 import io.github.tiagodocouto.playerservice.domain.player.document.Player
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.arbitrary
@@ -31,6 +32,13 @@ object PlayerFixture {
     val Player.Companion.arbitrary: Arb<Player>
         get() = arbitrary {
             Player(
+                externalId = faker.uuid(),
+                name = faker.name(),
+            )
+        }
+    val PlayerRecord.Companion.arbitrary: Arb<PlayerRecord>
+        get() = arbitrary {
+            PlayerRecord(
                 externalId = faker.uuid(),
                 name = faker.name(),
             )

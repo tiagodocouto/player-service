@@ -22,7 +22,6 @@ package io.github.tiagodocouto.playerservice.domain.player.document
 
 import io.github.tiagodocouto.helper.fixture.PlayerFixture.arbitrary
 import io.github.tiagodocouto.helper.spec.TestSpec
-import io.kotest.assertions.asClue
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.property.checkAll
 
@@ -30,10 +29,8 @@ class PlayerTest : TestSpec() {
     @Test
     suspend fun `should create a Player`() {
         checkAll(Player.arbitrary) { player ->
-            player.asClue {
-                it.externalId.shouldNotBeNull()
-                it.name.shouldNotBeNull()
-            }
+            player.externalId.shouldNotBeNull()
+            player.name.shouldNotBeNull()
         }
     }
 }
