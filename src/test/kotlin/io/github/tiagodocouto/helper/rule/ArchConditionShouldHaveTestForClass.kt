@@ -42,7 +42,7 @@ object ArchConditionShouldHaveTestForClass : ArchCondition<JavaClass>("should ha
     private val JavaClass.shouldIgnore: Boolean
         get() = simpleName.endsWith(SUFFIX_TEST) ||
             simpleName.endsWith(SUFFIX_KT) ||
-                simpleName.endsWith(SUFFIX_IMPL) ||
+            simpleName.endsWith(SUFFIX_IMPL) ||
             simpleName.endsWith(SUFFIX_EXTENSION) ||
             simpleName.endsWith(SUFFIX_EXCEPTION) ||
             name.contains(IS_ANONYMOUS_CLASS) ||

@@ -1,6 +1,7 @@
 [versions]
 kotlin = "1.9.0"
 kotlinx-kover = "0.7.3"
+mapstruct = "1.5.5.Final"
 quality-catalog = "0.8.1"
 quality-detekt = "1.23.1"
 quality-sonarqube = "4.3.0.3225"
@@ -24,13 +25,12 @@ test-pitest-git = "1.1.1"
 test-pitest-github = "1.0.4"
 test-pitest-kotlin = "1.0.8"
 test-pitest-spring = "0.0.10"
-test-testcontainers = "1.18.3"
-mapstruct = "1.5.5.Final"
+test-testcontainers = "1.19.0"
 
 [libraries]
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
 mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
-kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 quality-detekt-plugin-complexity = { module = "io.gitlab.arturbosch.detekt:detekt-rules-complexity", version.ref = "quality-detekt" }
 quality-detekt-plugin-coroutines = { module = "io.gitlab.arturbosch.detekt:detekt-rules-coroutines", version.ref = "quality-detekt" }
 quality-detekt-plugin-documentation = { module = "io.gitlab.arturbosch.detekt:detekt-rules-documentation", version.ref = "quality-detekt" }
@@ -45,8 +45,8 @@ quality-detekt-plugin-rules = { module = "io.gitlab.arturbosch.detekt:detekt-rul
 quality-detekt-plugin-style = { module = "io.gitlab.arturbosch.detekt:detekt-rules-style", version.ref = "quality-detekt" }
 spring-boot-data-mongodb = { module = "org.springframework.boot:spring-boot-starter-data-mongodb" }
 spring-boot-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
-spring-boot-web = { module = "org.springframework.boot:spring-boot-starter-web" }
 spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" }
+spring-boot-web = { module = "org.springframework.boot:spring-boot-starter-web" }
 spring-dev-tools = { module = "org.springframework.boot:spring-boot-devtools" }
 test-archunit-core = { module = "com.tngtech.archunit:archunit", version.ref = "test-archunit" }
 test-archunit-junit5 = { module = "com.tngtech.archunit:archunit-junit5", version.ref = "test-archunit" }
@@ -121,8 +121,8 @@ test-testcontainers = [
 ]
 
 [plugins]
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
 kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinx-kover" }
 quality-catalog = { id = "nl.littlerobots.version-catalog-update", version.ref = "quality-catalog" }
