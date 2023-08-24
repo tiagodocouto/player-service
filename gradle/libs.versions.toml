@@ -1,5 +1,5 @@
 [versions]
-kotlin = "1.9.0"
+kotlin = "1.9.10"
 kotlinx-kover = "0.7.3"
 quality-catalog = "0.8.1"
 quality-detekt = "1.23.1"
