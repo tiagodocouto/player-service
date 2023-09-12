@@ -57,6 +57,7 @@ jobs:
       - name: codeql init 🧰
         uses: github/codeql-action/init@v2
         with:
+          tools: latest
           languages: java
 
       - name: setup java ${{ matrix.java }} ☕️
@@ -82,7 +83,9 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: pitest 🧟‍
-        run: ./gradlew pitest
+        run: ./gradlew pitest pitest-github -Dfeatures="+GIT(from[HEAD~1]), +gitci, +KOTLIN"
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: codeql analyze 🧪
         uses: github/codeql-action/analyze@v2
@@ -114,11 +117,3 @@ jobs:
           refresh-message-position: true
           message-path: |
             ${{ github.workspace }}/build/reports/detekt/*.md
-
-      - name: add pr comment - pitest 🗿
-        uses: mshick/add-pr-comment@v2
-        with:
-          message-id: reports-pitest
-          refresh-message-position: true
-          message-path: |
-            ${{ github.workspace }}/build/reports/pitest/*.md

@@ -1,8 +1,8 @@
-#Latest licence for this subscription available at https://subscriptions.arcmutate.com/88ca04af-4915-4bf5-8717-aae12c62457b/cdg-pitest-licence.txt
-#Thu Aug 17 14:42:26 UTC 2023
-expires=16/09/2023
-signature=bGNQs6YqItmsGisB6y03KItmH5Q1/N9l24lrUyzYJmuP0kPdmsMFdB94sy4u0GebBDcK9qxFk136TOwFyvfYiz47qKZea4e37Vq6S+eWgVOQSr8Z5RB4LANVSN5EhIj6dHGStGenX8cmRgCjQ5SqiPDTXq+hsk+WO0mDRIdVl8k\=
-packages=io.github.tiagodocouto.*
+#Latest licence for this subscription available at https://subscriptions.arcmutate.com/5ed17f0f-2fc3-4ce1-a26c-a2140d99f088/cdg-pitest-licence.txt
+#Tue Sep 12 08:49:39 UTC 2023
+expires=12/10/2023
+signature=aNvE8MO2rMX1+3OBsCfE0cb/abQYL6MhDDtU/Wx0k1m89ENZivQo6H5Wvq4a72z58xvUVlSlP490cw0ODf1T/hkqa54bo8EyMjlXigLN4j1bE2V30s7A2imcwVoY3DReApkf+JEXZXOwb1duyQZY8zmMcgK4DuTJ4JZobR1jgpo\=
+packages=io.github.*
 type=EVALUATION
 users=1
 keyVersion=1

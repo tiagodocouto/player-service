@@ -18,19 +18,26 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.tiagodocouto.playerservice.domain.player.document
+package io.github.tiagodocouto.playerservice.app.player.controller
 
-import io.github.tiagodocouto.helper.fixture.PlayerFixture.arbitrary
-import io.github.tiagodocouto.helper.spec.TestSpec
-import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.property.checkAll
+import io.github.tiagodocouto.helper.infra.IntegrationTestContext
+import io.github.tiagodocouto.helper.spec.IntegrationTestSpec
+import io.github.tiagodocouto.playerservice.app.player.client.PlayerRecord
+import io.kotest.matchers.shouldBe
 
-class PlayerTest : TestSpec() {
+@IntegrationTestContext
+class PlayerControllerTest(
+    private val playerController: PlayerController,
+) : IntegrationTestSpec() {
     @Test
-    suspend fun `should create a Player`() {
-        checkAll(Player.arbitrary) { player ->
-            player.externalId.shouldNotBeNull()
-            player.name.shouldNotBeNull()
-        }
+    fun `should save a Player`() {
+        val record = PlayerRecord(
+            externalId = "1",
+            name = "Tiago",
+        )
+        val result = playerController.new(record)
+
+        result.externalId shouldBe record.externalId
+        result.name shouldBe record.name
     }
 }

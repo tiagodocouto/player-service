@@ -18,17 +18,17 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.tiagodocouto.playerservice.domain.player.document
+package io.github.tiagodocouto.playerservice.app.player.client
 
 import io.github.tiagodocouto.helper.fixture.PlayerFixture.arbitrary
 import io.github.tiagodocouto.helper.spec.TestSpec
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.property.checkAll
 
-class PlayerTest : TestSpec() {
+class PlayerRecordTest : TestSpec() {
     @Test
-    suspend fun `should create a Player`() {
-        checkAll(Player.arbitrary) { player ->
+    suspend fun `should create a PlayerRecord`() {
+        checkAll(PlayerRecord.arbitrary) { player ->
             player.externalId.shouldNotBeNull()
             player.name.shouldNotBeNull()
         }

@@ -28,6 +28,7 @@ import io.github.tiagodocouto.playerservice.core.extension.ListExtensions.isMiss
 
 private const val SUFFIX_TEST = "Test"
 private const val SUFFIX_KT = "Kt"
+private const val SUFFIX_IMPL = "Impl"
 private const val SUFFIX_EXTENSION = "Extensions"
 private const val SUFFIX_EXCEPTION = "Exception"
 private const val IS_ANONYMOUS_CLASS = "$"
@@ -41,6 +42,7 @@ object ArchConditionShouldHaveTestForClass : ArchCondition<JavaClass>("should ha
     private val JavaClass.shouldIgnore: Boolean
         get() = simpleName.endsWith(SUFFIX_TEST) ||
             simpleName.endsWith(SUFFIX_KT) ||
+            simpleName.endsWith(SUFFIX_IMPL) ||
             simpleName.endsWith(SUFFIX_EXTENSION) ||
             simpleName.endsWith(SUFFIX_EXCEPTION) ||
             name.contains(IS_ANONYMOUS_CLASS) ||

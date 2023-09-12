@@ -18,19 +18,36 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.tiagodocouto.playerservice.domain.player.document
+package io.github.tiagodocouto.playerservice.app.player.client
 
-import io.github.tiagodocouto.helper.fixture.PlayerFixture.arbitrary
-import io.github.tiagodocouto.helper.spec.TestSpec
-import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.property.checkAll
+import io.github.tiagodocouto.playerservice.app.mapper.annotation.IgnoreBaseFields
+import io.github.tiagodocouto.playerservice.domain.player.document.Player
+import org.mapstruct.InheritInverseConfiguration
+import org.mapstruct.Mapper
 
-class PlayerTest : TestSpec() {
-    @Test
-    suspend fun `should create a Player`() {
-        checkAll(Player.arbitrary) { player ->
-            player.externalId.shouldNotBeNull()
-            player.name.shouldNotBeNull()
-        }
-    }
+/**
+ * # [PlayerMapper]
+ * maps a [Player] to a [PlayerRecord] and vice-versa.
+ */
+@Mapper(componentModel = "spring")
+interface PlayerMapper {
+    /**
+     * [PlayerMapper.toRecord]
+     * maps a [Player] to a [PlayerRecord].
+     *
+     * @param entity the [Player] to be mapped
+     * @return the mapped [PlayerRecord]
+     */
+    fun toRecord(entity: Player): PlayerRecord
+
+    /**
+     * [PlayerMapper.toEntity]
+     * maps a [PlayerRecord] to a [Player].
+     *
+     * @param dto the [PlayerRecord] to be mapped
+     * @return the mapped [Player]
+     */
+    @InheritInverseConfiguration
+    @IgnoreBaseFields
+    fun toEntity(dto: PlayerRecord): Player
 }
