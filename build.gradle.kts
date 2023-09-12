@@ -83,26 +83,28 @@ kover {
 }
 
 detekt {
+    val dependencyConfigurationDetekt: String by project
+    config.setFrom(dependencyConfigurationDetekt)
     buildUponDefaultConfig = true
     allRules = true
-    config.setFrom("$rootDir/detekt-config.yml")
 }
 
 java { sourceCompatibility = JavaVersion.VERSION_20 }
 
 spotless {
+    val dependencyConfigurationDiktat: String by project
     kotlin {
         target("src/main/**/*.kt")
         ktfmt()
         ktlint()
-        diktat().configFile("diktat-analysis.yml")
+        diktat().configFile(dependencyConfigurationDiktat)
         trimTrailingWhitespace()
         endWithNewline()
     }
     kotlinGradle {
         target("*.gradle.kts")
         ktlint()
-        diktat().configFile("diktat-analysis.yml")
+        diktat().configFile(dependencyConfigurationDiktat)
     }
     format("misc") {
         target("*.md", "*.yml", "*.properties", ".gitignore")
@@ -113,15 +115,18 @@ spotless {
 }
 
 allure {
-    version = "2.19.0"
+    val dependencyVersionAllure: String by project
+    version = dependencyVersionAllure
 }
 
 pitest {
-    pitestVersion = "1.14.4"
+    val dependencyVersionPitest: String by project
+    pitestVersion = dependencyVersionPitest
     threads = Runtime.getRuntime().availableProcessors()
-    targetClasses = listOf("io.github.tiagodocouto.*")
+    targetClasses = listOf("$group.*")
     outputFormats = listOf("XML", "HTML", "gitci")
     mutators = listOf("ALL")
+    features = listOf("+GIT(from[HEAD~1])", "+gitci", "+KOTLIN")
 }
 
 tasks {
@@ -159,4 +164,15 @@ configurations {
     developmentOnly
     runtimeClasspath { extendsFrom(configurations.developmentOnly.get()) }
     compileOnly { extendsFrom(configurations.annotationProcessor.get()) }
+    // Detekt Configuration
+    val dependencyNameDetekt: String by project
+    val dependencyPackageKotlin: String by project
+    val dependencyVersionDetektKotlin: String by project
+    matching { it.name == dependencyNameDetekt }.all {
+        resolutionStrategy.eachDependency {
+            if (requested.group == dependencyPackageKotlin) {
+                useVersion(dependencyVersionDetektKotlin)
+            }
+        }
+    }
 }
