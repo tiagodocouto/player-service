@@ -121,12 +121,14 @@ allure {
 
 pitest {
     val dependencyVersionPitest: String by project
+    val dependencyVersionPitestJunit5: String by project
     pitestVersion = dependencyVersionPitest
+    junit5PluginVersion = dependencyVersionPitestJunit5
     threads = Runtime.getRuntime().availableProcessors()
     targetClasses = listOf("$group.*")
     outputFormats = listOf("XML", "HTML", "gitci")
-    mutators = listOf("ALL")
-    features = listOf("+GIT(from[HEAD~1])", "+gitci", "+KOTLIN")
+    mutators = listOf("STRONGER", "EXTENDED", "SPRING")
+    features = listOf("+gitci", "+KOTLIN")
 }
 
 tasks {

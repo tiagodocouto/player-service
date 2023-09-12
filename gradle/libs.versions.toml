@@ -1,6 +1,5 @@
 [versions]
-kotlin = "1.9.20-Beta"
-kotlin-reflect = "1.9.10"
+kotlin = "1.9.10"
 kotlinx-kover = "0.7.3"
 mapstruct = "1.5.5.Final"
 quality-catalog = "0.8.1"
@@ -26,10 +25,11 @@ test-pitest-git = "1.1.2"
 test-pitest-github = "1.0.5"
 test-pitest-kotlin = "1.0.8"
 test-pitest-spring = "0.0.10"
+test-pitest-accelerator = "1.0.6"
 test-testcontainers = "1.19.0"
 
 [libraries]
-kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin-reflect" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
 mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
 quality-detekt-plugin-complexity = { module = "io.gitlab.arturbosch.detekt:detekt-rules-complexity", version.ref = "quality-detekt" }
@@ -65,6 +65,7 @@ test-pitest-base = { module = "com.groupcdg.arcmutate:base", version.ref = "test
 test-pitest-git = { module = "com.groupcdg:pitest-git-plugin", version.ref = "test-pitest-git" }
 test-pitest-kotlin = { module = "com.groupcdg.pitest:pitest-kotlin-plugin", version.ref = "test-pitest-kotlin" }
 test-pitest-spring = { module = "com.groupcdg.arcmutate:arcmutate-spring", version.ref = "test-pitest-spring" }
+test-pitest-accelerator = { module = "com.groupcdg.pitest:pitest-accelerator-junit5", version.ref = "test-pitest-accelerator" }
 test-spring-boot = { module = "org.springframework.boot:spring-boot-starter-test" }
 test-testcontainers-junit = { module = "org.testcontainers:junit-jupiter", version.ref = "test-testcontainers" }
 test-testcontainers-mongodb = { module = "org.testcontainers:mongodb", version.ref = "test-testcontainers" }
@@ -112,6 +113,7 @@ test-pitest = [
     "test-pitest-git",
     "test-pitest-kotlin",
     "test-pitest-spring",
+    "test-pitest-accelerator",
 ]
 test-spring-boot = [
     "test-spring-boot",
