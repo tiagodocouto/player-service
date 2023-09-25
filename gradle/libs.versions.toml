@@ -22,7 +22,7 @@ test-pitest = "1.9.11"
 test-pitest-base = "1.1.3"
 test-pitest-git = "1.1.1"
 test-pitest-github = "1.0.4"
-test-pitest-kotlin = "1.0.8"
+test-pitest-kotlin = "1.1.0"
 test-pitest-spring = "0.0.10"
 test-testcontainers = "1.18.3"
 
